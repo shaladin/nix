@@ -1,0 +1,23 @@
+@if (!template) {
+    <ion-text color="danger">Oops, template not configure properly.</ion-text>
+} @else {
+    @if (isVisible && !hasError) {
+        <ion-segment [scrollable]="template.scrollable" [(ngModel)]="segment" (ionChange)="onChange($event)">
+            @for (component of template.component; track component) {
+                <ion-segment-button [value]="component.header">
+                    <ion-label>{{component.header}}</ion-label>
+                </ion-segment-button>
+            }
+        </ion-segment>
+    
+        <div class="view-component">
+            @for (item of template.component; track item) {
+              <lib-view-content [component]="item" [dict]="dict" *ngIf="segment === item.header"></lib-view-content>
+            } @empty {
+              <ion-text color="warning">Data not available.</ion-text>
+            }
+        </div>
+    } @else if (hasError && !isLoading) {
+        <div class="text-sm text-red-600">Something went wrong, view the console error log!</div>
+    }
+}

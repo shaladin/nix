@@ -1,0 +1,29 @@
+@if (!isLoading && !hasError) {
+    <ion-segment [(ngModel)]="segment" (ionChange)="onChange($event)">
+        @for (cat of data; track cat.header) {
+            <ion-segment-button [value]="cat.header">
+                <ion-label>{{cat.header}}</ion-label>
+            </ion-segment-button>
+        }
+    </ion-segment>
+    
+    <ion-grid>
+        <ion-row>
+            @for (item of items; track item.title) {
+                <ion-col size="3" size-sm="2">
+                    <div class="menu-container">
+                      <ion-avatar class="ion-align-self-center">
+                        <img [alt]="item?.title" [src]="item?.icon" />
+                      </ion-avatar>
+                      <span class="menu-title">{{item?.title}}</span>
+                    </div>
+                </ion-col>
+            }
+        </ion-row>
+    </ion-grid>
+} @else if (isLoading) {
+    <lib-app-menu-skeleton></lib-app-menu-skeleton>
+} @else {
+    <p>Oops, something went wrong....</p>
+    <button>Retry</button>
+}

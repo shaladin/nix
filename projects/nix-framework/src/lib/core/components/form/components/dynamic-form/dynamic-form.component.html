@@ -1,0 +1,54 @@
+@if (!template) {
+    <ion-text color="danger">Template not configure properly.</ion-text>
+}
+
+@if (template) {
+    <form (ngSubmit)="onSubmit()" [formGroup]="form">
+        <ion-grid>
+            <ion-row>
+            @for (question of template.questions; track question) {
+                @switch (question.controlType) {
+                    @case ('group') {
+                        <ion-col size="12" [ngClass]="question?.className">
+                            <lib-dynamic-question 
+                                [question]="question" 
+                                [form]="form" 
+                                [errors]="formErrors" 
+                                [dict]="dict"
+                                [subscriber]="subscriber" 
+                                (onChange)="onChange($event)">
+                            </lib-dynamic-question>
+                        </ion-col>
+                    } @case ('container') {
+                        <ion-col size="12" [ngClass]="question?.className">
+                            <ng-content [select]="question?.content"></ng-content>
+                        </ion-col>
+                    } @default {
+                        <ion-col size="12" size-sm="6" size-md="4">
+                            <lib-dynamic-question 
+                                [question]="question" 
+                                [form]="form" 
+                                [errors]="formErrors" 
+                                [dict]="dict"
+                                [subscriber]="subscriber" 
+                                (onChange)="onChange($event)">
+                            </lib-dynamic-question>
+                        </ion-col>
+                    }
+                }
+            }
+            </ion-row>
+
+            <ion-row>
+                <ion-col>
+                    <ion-button type="button" expand="block" fill="outline">Cancel</ion-button>
+                </ion-col>
+                <ion-col>
+                    <ion-button type="submit" expand="block" fill="solid" [disabled]="!form.valid">Submit</ion-button>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </form>
+}
+
+<pre [innerHTML]="model | json"></pre>

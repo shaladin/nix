@@ -10,6 +10,14 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "skipLibCheck": true,
+    "paths": {
+      "ngx-framework": [
+        "./dist/ngx-framework"
+      ],
+      "nix-framework": [
+        "./dist/nix-framework"
+      ]
+    },
     "esModuleInterop": true,
     "sourceMap": true,
     "declaration": false,

@@ -1,0 +1,24 @@
+<ion-segment>
+    @for (item of [].constructor(2); track $index){
+        <ion-segment-button>
+            <ion-skeleton-text [animated]="true" style="width: 64px;"></ion-skeleton-text>
+        </ion-segment-button>
+    }
+</ion-segment>
+
+<ion-grid>
+    <ion-row>
+        @for (_ of [].constructor(4); track $index){
+            <ion-col size="3" size-sm="2">
+                <div class="menu-container">
+                    <ion-avatar class="ion-align-self-center">
+                        <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+                    </ion-avatar>
+                    <span class="menu-title">
+                        <ion-skeleton-text [animated]="true" style="width: 50px;"></ion-skeleton-text>
+                    </span>
+                </div>
+            </ion-col>
+        }
+    </ion-row>
+</ion-grid>

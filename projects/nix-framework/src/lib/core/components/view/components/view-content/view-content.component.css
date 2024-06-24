@@ -1,0 +1,25 @@
+.view-content {
+    display: grid;
+    font-size: .75rem;
+    grid-template-columns: 40% 60%;
+    line-height: 1rem;
+    border-bottom: 1px solid #dedede;
+    padding: 8px;
+
+    .view-label {
+        text-align: left;
+        font-weight: 500;
+    }
+
+    .view-value::before {
+        content: ": ";
+    }
+    
+    .view-value {
+        text-align: justify;
+    }
+}
+
+.view-content:last-child {
+    border: none;
+}

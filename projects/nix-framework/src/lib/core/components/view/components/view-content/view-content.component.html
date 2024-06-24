@@ -1,0 +1,29 @@
+@if (!component) {
+    <ion-text color="danger">View content not yet configured!</ion-text>
+}
+  
+@if (!isLoading && !hasError) {
+    @for (item of content; track item) {
+        <div class="view-content">
+        <div class="view-label">{{item.label}}</div>
+        <div class="view-value">{{item.value}}</div>
+        </div>
+    } @empty {
+        <ion-text color="warning">Data not available.</ion-text>
+    }
+} @else if (isLoading) {
+    <ion-grid>
+        @for (item of [].constructor(5); track $index) {
+            <ion-row>
+                <ion-col size="6">
+                    <ion-skeleton-text [animated]="true" style="width: 99%"></ion-skeleton-text>
+                </ion-col>
+                <ion-col size="6">
+                    <ion-skeleton-text [animated]="true" style="width: 99%"></ion-skeleton-text>
+                </ion-col>
+            </ion-row>
+        }
+    </ion-grid>
+} @else {
+    <ion-text color="danger">Oops, failed to fetch data...</ion-text>
+}

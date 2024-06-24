@@ -1,0 +1,21 @@
+<form (ngSubmit)="onSubmit()" [formGroup]="form">
+    <ion-grid>
+        <ng-content></ng-content>
+
+        @if (showDefaultButtons) {
+            <ion-row>
+                <ion-col>
+                    <ion-button type="button" expand="block" fill="outline">Cancel</ion-button>
+                </ion-col>
+                <ion-col>
+                    <ion-button type="submit" expand="block" fill="solid" [disabled]="!form.valid">Submit</ion-button>
+                </ion-col>
+            </ion-row>
+        }
+    </ion-grid>
+    <ng-content select="buttons"></ng-content>
+</form>
+
+@if (debug) {
+    <pre [innerHTML]="values | pretty"></pre>
+}

@@ -1,0 +1,15 @@
+ion-radio {
+    margin-right: 16px;
+}
+
+ion-radio:last-child {
+    margin-right: 0 !important;
+}
+
+ion-modal.nix-modal {
+    --width: fit-content;
+    --min-width: 250px;
+    --height: fit-content;
+    --border-radius: 6px;
+    --box-shadow: 0 28px 48px rgba(0, 0, 0, 0.4);
+  }

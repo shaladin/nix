@@ -1,0 +1,133 @@
+<ng-container [formGroup]="form">
+    @if (question.controlType === 'group') {
+        <!-- <ion-grid> -->
+        <ion-row>
+            @for (childQuestion of question.children; track childQuestion) {
+                <ion-col *ngIf="childQuestion.isVisible" [ngClass]="childQuestion?.className"
+                [size]="childQuestion?.column ? childQuestion.column.size : '12'" 
+                [attr.size-sm]="childQuestion?.column ? childQuestion.column.sm : '6'"
+                [attr.size-md]="childQuestion?.column ? childQuestion.column.md : '4'">
+                    <lib-dynamic-question
+                        [question]="childQuestion"
+                        [form]="childGroup"
+                        [errors]="errors"
+                        [dict]="dict"
+                        [subscriber]="subscriber"
+                        (onChange)="ionChange($event)">
+                    </lib-dynamic-question>
+                </ion-col>
+            }
+        </ion-row>
+        <!-- </ion-grid> -->
+    } @else {
+        @switch (question.controlType) {
+            @case ('textbox') {
+                <!-- <input [formControlName]="question.key" [id]="question.key" [type]="question.type"> -->
+                <ion-input
+                    [id]="question.key"
+                    [formControlName]="question.key"
+                    [type]="question.type"
+                    [fill]="question.fill"
+                    [label]="question.label"
+                    [errorText]="alertMessage"
+                    [placeholder]="question?.placeholder"
+                    [labelPlacement]="question.labelPlacement"
+                    [required]="question.required"
+                    (ionChange)="ionChange(question.key)">
+                </ion-input>
+            } @case ('dropdown') {
+                @if (!isLoading) {
+                    <ion-select [id]="question.key" [formControlName]="question.key" [label]="question.label" 
+                    (ionChange)="ionChange(question.key)" label-placement="floating" fill="solid">
+                        @for (opt of question.options; track opt) {
+                        <ion-select-option [value]="opt.key">{{ opt.value }}</ion-select-option>
+                        }
+                    </ion-select>
+                } @else {
+                    <ion-skeleton-text [animated]="true" style="width: 100%; height: 56px; border-radius: 4px;"></ion-skeleton-text>
+                }
+            } @case ('radio') {
+                <div class="block text-sm font-medium leading-6 text-gray-900"><label [attr.for]="question.key">{{ question.label }}</label></div>
+                <div class="mt-2">
+                    <ion-radio-group [id]="question.key" [allowEmptySelection]="true" [formControlName]="question.key" (ionChange)="ionChange(question.key)">
+                        @for (opt of question.options; track opt) {
+                        <ion-radio [value]="opt.key" labelPlacement="end">{{ opt.value }}</ion-radio>
+                        }
+                    </ion-radio-group>
+                </div>
+            } @case ('textarea') {
+                <ion-textarea
+                    [fill]="question.fill"
+                    [label]="question.label"
+                    [labelPlacement]="question?.labelPlacement"
+                    [formControlName]="question.key"
+                    [placeholder]="question?.placeholder"
+                    [errorText]="alertMessage"
+                    [autoGrow]="question?.autoGrow"
+                    (ionChange)="ionChange(question.key)">
+                </ion-textarea>
+            } @case ('hidden') {
+                <input type="hidden" [formControlName]="question.key" />
+            } @case ('datetime') {
+                <ion-input
+                    [formControlName]="question.key"
+                    [fill]="question.fill"
+                    [label]="question.label"
+                    [placeholder]="question.placeholder"
+                    [errorText]="alertMessage"
+                    [required]="question.required"
+                    [labelPlacement]="question.labelPlacement"
+                    [maskito]="dateMask"
+                    [maskitoElement]="maskPredicate"
+                    (ionChange)="ionChange(question.key)">
+                    <ion-button fill="clear" slot="end" aria-label="Select Date" [id]="question.key">
+                        <ion-icon slot="icon-only" name="calendar-outline" aria-hidden="true"></ion-icon>
+                    </ion-button>
+                </ion-input>
+                <ion-modal class="nix-modal" [trigger]="question.key" [keepContentsMounted]="true">
+                    <ng-template>
+                      <ion-datetime #datetime [locale]="question.locale" [presentation]="question.type" 
+                      [name]="question.key" [attr.min]="question.min" [attr.max]="question.max" (ionChange)="setDate($event)">
+                        <span slot="title">Select {{question.label}}</span>
+                        <ion-buttons slot="buttons">
+                            <ion-button color="danger" (click)="datetime.cancel(true)">Cancel</ion-button>
+                            <ion-button color="primary" (click)="datetime.confirm(true)">Done</ion-button>
+                            <ion-button color="primary" (click)="ionDateAction('today', datetime)">Today</ion-button>
+                        </ion-buttons>
+                      </ion-datetime>
+                    </ng-template>
+                </ion-modal>
+            } @case ('currency') {
+                <ion-input
+                    type="tel"
+                    mask="separator.2"
+                    [id]="question.key"
+                    [formControlName]="question.key"
+                    [fill]="question.fill"
+                    [label]="question.label"
+                    [placeholder]="question.placeholder"
+                    [errorText]="alertMessage"
+                    [required]="question.required"
+                    [labelPlacement]="question.labelPlacement"
+                    (ionChange)="ionChange(question.key)">
+                </ion-input>
+            } @case ('percentage') {
+                <ion-input
+                    type="tel"
+                    [id]="question.key"
+                    [formControlName]="question.key"
+                    [fill]="question.fill"
+                    [label]="question.label"
+                    [placeholder]="question.placeholder"
+                    [errorText]="alertMessage"
+                    [required]="question.required"
+                    [labelPlacement]="question.labelPlacement"
+                    [maskito]="percentageMask"
+                    [maskitoElement]="maskPredicate" 
+                    (ionChange)="ionChange(question.key)">
+                </ion-input>
+            }
+        }
+        @if (!isValid && hasOptionsAnswer) {<div class="text-xs text-red-600">{{ alertMessage }}</div>}
+    }
+</ng-container>
